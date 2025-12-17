@@ -42,9 +42,9 @@ public class UserRepository
         }
 
         logger.debug("User inserted, generated ID={}", id);
+
         return id;
     }
-
 
     public Optional<User> findById(long id)
     {
@@ -58,13 +58,13 @@ public class UserRepository
     public List<User> findAll()
     {
         logger.debug("Querying all users");
+
         return jdbcTemplate.query("SELECT ID, Name, Surname, PersonID, Uuid FROM Users", this::mapRow);
     }
 
     public void update(long id, String name, String surname)
     {
         logger.debug("Updating user in DB id={}, name='{}', surname='{}'", id, name, surname);
-
         jdbcTemplate.update("UPDATE Users SET Name = ?, Surname = ? WHERE ID = ?", name, surname, id);
     }
 

@@ -51,6 +51,7 @@ public class UserService
         long id = repository.save(req.getName(), req.getSurname(), req.getPersonID(), uuid);
 
         logger.info("User created: id={}, uuid={}", id, uuid);
+
         return new UserDetailResponse(id, req.getName(), req.getSurname(), req.getPersonID(), uuid);
     }
 
@@ -85,6 +86,7 @@ public class UserService
     public List<UserResponse> getAll()
     {
         logger.debug("Fetching all users (basic)");
+
         return repository.findAll().stream()
                 .map(u -> new UserResponse(u.getId(), u.getName(), u.getSurname()))
                 .toList();
@@ -93,6 +95,7 @@ public class UserService
     public List<UserDetailResponse> getAllDetail()
     {
         logger.debug("Fetching all users (detail)");
+
         return repository.findAll().stream()
                 .map(u -> new UserDetailResponse(u.getId(), u.getName(), u.getSurname(),
                         u.getPersonID(), u.getUuid()))
@@ -121,7 +124,7 @@ public class UserService
     {
         logger.warn("Deleting user id={}", id);
 
-        if (!repository.findById(id).isPresent())
+        if (repository.findById(id).isEmpty())
         {
             logger.warn("User not found id={} (delete)", id);
             throw new UserNotFoundException(id);

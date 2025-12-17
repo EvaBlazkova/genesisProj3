@@ -1,6 +1,8 @@
 package com.genesis.resources.service;
 
 import com.genesis.resources.dto.UserCreateRequest;
+import com.genesis.resources.dto.UserDetailResponse;
+import com.genesis.resources.dto.UserResponse;
 import com.genesis.resources.dto.UserUpdateRequest;
 import com.genesis.resources.exception.InvalidPersonIDException;
 import com.genesis.resources.exception.PersonIDAlreadyUsedException;
@@ -16,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -96,7 +99,7 @@ class UserServiceTest
         when(repository.save(eq("John"), eq("Doe"), eq("jXa4g3H7oPq2"), anyString()))
                 .thenReturn(10L);
 
-        var response = service.create(req);
+        UserDetailResponse response = service.create(req);
 
         assertEquals(10L, response.getId());
         assertEquals("John", response.getName());
@@ -137,7 +140,7 @@ class UserServiceTest
         User user = new User(5L, "Bob", "Brown", "jXa4g3H7oPq2", "uuid-xyz");
         when(repository.findById(5L)).thenReturn(Optional.of(user));
 
-        var response = service.getDetail(5L);
+        UserDetailResponse response = service.getDetail(5L);
 
         assertEquals(5L, response.getId());
         assertEquals("Bob", response.getName());
@@ -202,7 +205,7 @@ class UserServiceTest
         User u2 = new User(2L, "C", "D", "yB9fR6tK0wLm", "uuid-2");
         when(repository.findAll()).thenReturn(java.util.List.of(u1, u2));
 
-        var result = service.getAll();
+        List<UserResponse> result = service.getAll();
 
         assertEquals(2, result.size());
         assertEquals("A", result.get(0).getName());
@@ -216,7 +219,7 @@ class UserServiceTest
         User u2 = new User(2L, "C", "D", "yB9fR6tK0wLm", "uuid-2");
         when(repository.findAll()).thenReturn(java.util.List.of(u1, u2));
 
-        var result = service.getAllDetail();
+        List<UserDetailResponse> result = service.getAllDetail();
 
         assertEquals(2, result.size());
         assertEquals("jXa4g3H7oPq2", result.get(0).getPersonID());
